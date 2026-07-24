@@ -7,7 +7,7 @@ const defaultCells = [
 	[1, 1, 1],
 ];
 
-function initalState(gameSize: number = 50, initalCells: number[][] = defaultCells) {
+function initalState(gameSize: number = 50, initalCells: number[][] = defaultCells): number[][] {
 	let gameArea = Array.from({ length: gameSize }, () => Array(gameSize).fill(0));
 
 	const patternHeight = initalCells.length;
@@ -24,14 +24,51 @@ function initalState(gameSize: number = 50, initalCells: number[][] = defaultCel
 	return gameArea;
 }
 
-function simulate(initalState: number[][], gameDuration: number = 50) {
-	const states = [];
-	states.push(initalState);
+function countNeighbors(cells: number[][]): number {
+	let count = 0;
+
+	for (let i = 0; i < cells.length; i++) {
+		for (let j = 0; j < cells[i].length; j++) {
+			if (i === 1 && j === 1) continue;
+			if (cells[i][j] === 1) count++;
+		}
+	}
+
+	return count;
+}
+
+function simulate(initalState: number[][], gameDuration: number = 50): number[][][] {
+	function itterate(state: number[][]): number[][] {
+		const newState: number[][] = [];
+
+		for (let i = 0; i < state.length; i++) {
+			for (let j = 0; j < state[i].length; j++) {
+				const slices = state.slice(i - 1, i + 1);
+				const cells: number[][] = [];
+				slices.forEach((row) => cells.push(row.slice(j - 1, j + 1)));
+				const neighbors = countNeighbors(cells);
+				if (state[i][j] === 0 && neighbors === 3) {
+					state[i][j] = 1;
+				} else {
+					state[i][j] = 0;
+				}
+			}
+		}
+
+		return newState;
+	}
+
+	const states = [initalState];
+
+	for (let i = 1; i < gameDuration; i++) {
+		const state = itterate(states[i - 1]);
+		states.push(state);
+	}
 
 	return states;
 }
 
-function display(states: number[][][]) {
+function display(states: number[][][]): void {
 	states.forEach((state) => {
 		for (let i = 0; i < state.length; i++) {
 			let row = "";
