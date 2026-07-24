@@ -39,7 +39,7 @@ function countNeighbors(cells: number[][]): number {
 
 function simulate(initalState: number[][], gameDuration: number = 50): number[][][] {
 	function itterate(state: number[][]): number[][] {
-		const newState: number[][] = [];
+		const newState: number[][] = Array.from({ length: state.length }, () => Array(state.length).fill(0));
 
 		for (let i = 0; i < state.length; i++) {
 			for (let j = 0; j < state[i].length; j++) {
@@ -51,9 +51,9 @@ function simulate(initalState: number[][], gameDuration: number = 50): number[][
 
 				//calculate the cells fate
 				if ((state[i][j] === 0 && neighbors === 3) || (state[i][j] === 1 && (neighbors === 2 || neighbors === 3))) {
-					state[i][j] = 1;
+					newState[i][j] = 1;
 				} else {
-					state[i][j] = 0;
+					newState[i][j] = 0;
 				}
 			}
 		}
@@ -72,7 +72,8 @@ function simulate(initalState: number[][], gameDuration: number = 50): number[][
 }
 
 function display(states: number[][][]): void {
-	states.forEach((state) => {
+	states.forEach((state, count) => {
+		console.log("State[" + count.toString() + "]");
 		for (let i = 0; i < state.length; i++) {
 			let row = "";
 			for (let j = 0; j < state[i].length; j++) {
@@ -88,5 +89,5 @@ function display(states: number[][][]): void {
 }
 
 const start = initalState();
-const states = simulate(start, 0);
+const states = simulate(start, 2);
 display(states);
