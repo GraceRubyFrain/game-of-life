@@ -43,11 +43,14 @@ function simulate(initalState: number[][], gameDuration: number = 50): number[][
 
 		for (let i = 0; i < state.length; i++) {
 			for (let j = 0; j < state[i].length; j++) {
+				//calculate the neighbors
 				const slices = state.slice(i - 1, i + 1);
 				const cells: number[][] = [];
 				slices.forEach((row) => cells.push(row.slice(j - 1, j + 1)));
 				const neighbors = countNeighbors(cells);
-				if (state[i][j] === 0 && neighbors === 3) {
+
+				//calculate the cells fate
+				if ((state[i][j] === 0 && neighbors === 3) || (state[i][j] === 1 && (neighbors === 2 || neighbors === 3))) {
 					state[i][j] = 1;
 				} else {
 					state[i][j] = 0;
