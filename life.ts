@@ -7,7 +7,13 @@ const defaultCells = [
 	[1, 1, 1],
 ];
 
-function initalState(gameSize: number = 50, initalCells: number[][] = defaultCells): number[][] {
+const bomb = [
+	[0, 1, 0],
+	[1, 1, 1],
+	[1, 1, 1],
+];
+
+function initalState(initalCells: number[][] = defaultCells, gameSize: number = 50): number[][] {
 	let gameArea = Array.from({ length: gameSize }, () => Array(gameSize).fill(0));
 
 	const patternHeight = initalCells.length;
@@ -24,19 +30,6 @@ function initalState(gameSize: number = 50, initalCells: number[][] = defaultCel
 	return gameArea;
 }
 
-function countNeighbors(cells: number[][]): number {
-	let count = 0;
-
-	for (let i = 0; i < cells.length; i++) {
-		for (let j = 0; j < cells[i].length; j++) {
-			if (i === 1 && j === 1) continue;
-			if (cells[i][j] === 1) count++;
-		}
-	}
-
-	return count;
-}
-
 function simulate(initalState: number[][], gameDuration: number = 50): number[][][] {
 	function itterate(state: number[][]): number[][] {
 		const newState: number[][] = Array.from({ length: state.length }, () => Array(state.length).fill(0));
@@ -44,10 +37,17 @@ function simulate(initalState: number[][], gameDuration: number = 50): number[][
 		for (let i = 0; i < state.length; i++) {
 			for (let j = 0; j < state[i].length; j++) {
 				//calculate the neighbors
-				const slices = state.slice(i - 1, i + 1);
-				const cells: number[][] = [];
-				slices.forEach((row) => cells.push(row.slice(j - 1, j + 1)));
-				const neighbors = countNeighbors(cells);
+				let neighbors = 0;
+				for (let di = -1; di <= 1; di++) {
+					for (let dj = -1; dj <= 1; dj++) {
+						if (di === 0 && dj === 0) continue;
+						const ni = i + di,
+							nj = j + dj;
+						if (ni >= 0 && ni < state.length && nj >= 0 && nj < state[i].length && state[ni][nj] === 1) {
+							neighbors++;
+						}
+					}
+				}
 
 				//calculate the cells fate
 				if ((state[i][j] === 0 && neighbors === 3) || (state[i][j] === 1 && (neighbors === 2 || neighbors === 3))) {
@@ -88,6 +88,6 @@ function display(states: number[][][]): void {
 	});
 }
 
-const start = initalState();
-const states = simulate(start, 2);
+const start = initalState(bomb);
+const states = simulate(start, 10);
 display(states);
