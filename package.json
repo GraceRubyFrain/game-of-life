@@ -1,0 +1,26 @@
+{
+	"name": "game-of-life",
+	"version": "1.0.0",
+	"description": "This a handwritten replica of Conway’s Game of Life ([Online Version](https://playgameoflife.com/))",
+	"main": "index.js",
+	"scripts": {
+		"start": "tsx life.ts",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/GraceRubyFrain/game-of-life.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs",
+	"bugs": {
+		"url": "https://github.com/GraceRubyFrain/game-of-life/issues"
+	},
+	"homepage": "https://github.com/GraceRubyFrain/game-of-life#readme",
+	"devDependencies": {
+		"tsx": "^4.23.1",
+		"typescript": "^6.0.0"
+	}
+}
