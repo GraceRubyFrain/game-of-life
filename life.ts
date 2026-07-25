@@ -115,6 +115,6 @@ function display(states: number[][][]): void {
 	});
 }
 
-const start = initalState(oneZeroOne, 50);
+const start = initalState(defaultCells, 10);
 const states = simulate(start, 10); // give it room to actually produce gliders
 display(states);
